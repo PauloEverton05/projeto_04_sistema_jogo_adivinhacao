@@ -548,9 +548,9 @@ def exibir_dica(numero_escolhido, numero_secreto):
     # TODO: Comparar números
     # TODO: Exibir mensagem apropriada
     if numero_escolhido < numero_secreto:
-        print("O número escolhido é MENOR que o número secreto!")
+        print("O número escolhido é MENOR que o número secreto!\n")
     elif numero_escolhido > numero_secreto:
-        print("O número escolhido é MAIOR que o número secreto!")
+        print("O número escolhido é MAIOR que o número secreto!\n")
 
 
 # ============================================
@@ -563,29 +563,29 @@ def salvar_dados_txt(jogadores, partidas):
     Salva os dados de jogadores e partidas nos arquivos .txt.
     """
     
-    # 1. Preparar Jogadores (Converter datetime para string)
+    #formata para escrever no jogadores.txt
     jogadores_para_salvar = {}
     for usuario, dados in jogadores.items():
         jogadores_para_salvar[usuario] = {
             'nome': dados['nome'],
-            'data_cadastro': dados['data_cadastro'].isoformat()
+            'data_cadastro': dados['data_cadastro'].isoformat() 
         }
     
-    # Escreve a string do dicionário no arquivo
+    #adiciona os jogadores
     try:
         with open(CAMINHO_JOGADORES, 'w', encoding='utf-8') as f:
             f.write(str(jogadores_para_salvar))
     except Exception as e:
         print(f"Erro ao salvar jogadores.txt: {e}")
 
-    # 2. Preparar Partidas (Converter datetime para string)
+    #formata as partidas para escrever no partidas.txt
     partidas_para_salvar = []
     for partida in partidas:
         partida_copia = partida.copy()
-        partida_copia['data'] = partida['data'].isoformat()
+        partida_copia['data'] = partida['data'].isoformat() #convertendo datetime para string
         partidas_para_salvar.append(partida_copia)
 
-    # Escreve a string da lista no arquivo
+    #salva as partidas
     try:
         with open(CAMINHO_PARTIDAS, 'w', encoding='utf-8') as f:
             f.write(str(partidas_para_salvar))
@@ -599,12 +599,12 @@ def carregar_dados_txt():
     """
     global jogadores, partidas, contador_partidas
 
-    # Carregar Jogadores
+    #carregando jogadores.txt
     if os.path.exists(CAMINHO_JOGADORES):
         try:
             with open(CAMINHO_JOGADORES, 'r', encoding='utf-8') as f:
                 conteudo = f.read()
-                jogadores_carregados = ast.literal_eval(conteudo)
+                jogadores_carregados = ast.literal_eval(conteudo) #transformar dados de texto para dicionário
                 
                 #converte strings de volta para o datetime
                 for usuario, dados in jogadores_carregados.items():
@@ -614,7 +614,7 @@ def carregar_dados_txt():
         except Exception as e:
             print(f"Erro ao carregar jogadores.txt: {e}")
 
-    # Carregar Partidas
+    #carregando partidas.txt
     if os.path.exists(CAMINHO_PARTIDAS):
         try:
             with open(CAMINHO_PARTIDAS, 'r', encoding='utf-8') as f:
@@ -632,7 +632,7 @@ def carregar_dados_txt():
         except Exception as e:
             print(f"Erro ao carregar partidas.txt: {e}")
 
-    print("\nDados carregados com sucesso dos arquivos .txt!")
+    print("\nDados carregados com sucesso")
 
 
 def salvar_relatorio_individual(usuario):
@@ -645,7 +645,6 @@ def salvar_relatorio_individual(usuario):
         nome_jogador = jogadores[usuario]['nome']
     except Exception as e:
         print(f"Erro ao calcular estatísticas para salvar: {e}")
-        return
 
     linhas_relatorio = [
         f"--- Relatório de Desempenho Individual ---\n",
@@ -733,7 +732,6 @@ def salvar_historico_individual(usuario, historico_dados, limite):
         caminho_arquivo = f"relatorios/historico_{usuario}.txt"
         with open(caminho_arquivo, "w", encoding='utf-8') as f:
             f.writelines(linhas_relatorio)
-        print(f"\nRelatório de histórico salvo com sucesso em: {caminho_arquivo}")
     
     except Exception as e:
         print(f"Erro ao salvar relatório de histórico: {e}")
@@ -741,14 +739,14 @@ def salvar_historico_individual(usuario, historico_dados, limite):
     Gera o histórico de partidas recentes de um jogador
     e salva em um arquivo .txt na pasta /relatorios.
     """
-    # 1. Pegar os dados
+    #pega os dados do histórico de partidas do usuário
     try:
         historico = historico_partidas(usuario, limite)
     except Exception as e:
         print(f"Erro ao buscar histórico para salvar: {e}")
         return
 
-    # 2. Definir o conteúdo
+    #formatando a parte de histórico de partidas do jogador logado
     linhas_relatorio = [
         f"--- Histórico de Partidas Recentes ---\n",
         f"Jogador: {usuario}\n",
@@ -765,7 +763,7 @@ def salvar_historico_individual(usuario, historico_dados, limite):
             linha = f"  ID {p['id']} | {data_formatada} | {p['resultado']} | Tentativas: {p['total_tentativas']} | Pontos: {p['pontuacao']}\n"
             linhas_relatorio.append(linha)
 
-    # 3. Salvar no arquivo
+    #salvando o histórico do usuário
     caminho_arquivo = f"relatorios/historico_{usuario}.txt"
     try:
         with open(caminho_arquivo, "w", encoding='utf-8') as f:
@@ -813,7 +811,7 @@ def main():
                 if dados_jogador:
                     print(f"Login bem-sucedido! Bem-vindo, {dados_jogador['nome']}!")
                     usuario_logado = usuario
-                #a função login_jogador já imprime o erro se falhar)
+                #a função login_jogador já imprime o erro se falhar
 
             elif opcao == '3':
                 # --- SAIR ---
@@ -849,7 +847,7 @@ def main():
                 if estatisticas['total_partidas'] > 0:
                     salvar_relatorio_individual(usuario_logado)
                 else:
-                    print("Nenhuma partida enocntrada.")
+                    print("Nenhuma partida encontrada.")
 
             elif opcao == '3':
                 # --- HISTÓRICO ---

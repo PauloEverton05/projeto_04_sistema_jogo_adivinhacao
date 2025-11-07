@@ -1,0 +1,6 @@
+--- Histórico de Partidas Recentes ---
+Jogador: carlos
+Mostrando as últimas 1 partidas.
+Relatório gerado em: 2025-11-07 19:03
+--------------------------------------------------
+  ID 9 | 2025-11-07 19:03 | VITÓRIA | Tentativas: 5 | Pontos: 60

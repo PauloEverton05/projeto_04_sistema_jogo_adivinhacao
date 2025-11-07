@@ -1,0 +1,12 @@
+--- Relatório de Desempenho Individual ---
+Jogador: Honorio (Pedro Lucas)
+Relatório gerado em: 2025-11-07 13:08
+--------------------------------------------------
+  Total de Partidas: 2
+  Vitórias: 1
+  Derrotas: 1
+  Taxa de Vitória: 50.0%
+  Média de Tentativas: 10.0
+  Melhor Pontuação: 10
+  Pontuação Total: 10
+--------------------------------------------------

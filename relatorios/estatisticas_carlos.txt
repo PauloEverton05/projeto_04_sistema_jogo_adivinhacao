@@ -1,0 +1,12 @@
+--- Relatório de Desempenho Individual ---
+Jogador: carlos (carlos eduardo)
+Relatório gerado em: 2025-11-07 19:03
+--------------------------------------------------
+  Total de Partidas: 1
+  Vitórias: 1
+  Derrotas: 0
+  Taxa de Vitória: 100.0%
+  Média de Tentativas: 5.0
+  Melhor Pontuação: 60
+  Pontuação Total: 60
+--------------------------------------------------

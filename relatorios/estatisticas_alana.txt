@@ -1,0 +1,12 @@
+--- Relatório de Desempenho Individual ---
+Jogador: alana (Alana Moreira)
+Relatório gerado em: 2025-11-07 13:59
+--------------------------------------------------
+  Total de Partidas: 2
+  Vitórias: 2
+  Derrotas: 0
+  Taxa de Vitória: 100.0%
+  Média de Tentativas: 8.0
+  Melhor Pontuação: 40
+  Pontuação Total: 60
+--------------------------------------------------

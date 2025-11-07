@@ -1,0 +1,6 @@
+--- Histórico de Partidas Recentes ---
+Jogador: paulo
+Mostrando as últimas 1 partidas.
+Relatório gerado em: 2025-11-07 10:58
+--------------------------------------------------
+  ID 1 | 2025-11-07 10:58 | VITÓRIA | Tentativas: 1 | Pontos: 100

@@ -1,0 +1,12 @@
+--- Relatório de Desempenho Individual ---
+Jogador: bianca (Bianca Beaufort)
+Relatório gerado em: 2025-11-07 13:57
+--------------------------------------------------
+  Total de Partidas: 2
+  Vitórias: 2
+  Derrotas: 0
+  Taxa de Vitória: 100.0%
+  Média de Tentativas: 6.0
+  Melhor Pontuação: 60
+  Pontuação Total: 100
+--------------------------------------------------

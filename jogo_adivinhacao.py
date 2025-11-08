@@ -150,7 +150,7 @@ def jogar_partida(usuario):
 
     while (tentativas <= MAX_TENTATIVAS):
 
-        entrada_usuario = input("Escolha um número entre 0 - 100: ")
+        entrada_usuario = input("\nEscolha um número entre 0 - 100: ")
         numero_escolhido = validar_numero(entrada_usuario)
 
         if numero_escolhido is None:
@@ -548,9 +548,9 @@ def exibir_dica(numero_escolhido, numero_secreto):
     # TODO: Comparar números
     # TODO: Exibir mensagem apropriada
     if numero_escolhido < numero_secreto:
-        print("O número escolhido é MENOR que o número secreto!\n")
+        print("O número escolhido é MENOR que o número secreto!")
     elif numero_escolhido > numero_secreto:
-        print("O número escolhido é MAIOR que o número secreto!\n")
+        print("O número escolhido é MAIOR que o número secreto!")
 
 
 # ============================================

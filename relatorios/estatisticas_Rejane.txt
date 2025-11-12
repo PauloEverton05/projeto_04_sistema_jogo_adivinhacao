@@ -1,12 +1,12 @@
 --- Relatório de Desempenho Individual ---
-Jogador: bianca (Bianca Beaufort)
-Relatório gerado em: 2025-11-09 23:05
+Jogador: Rejane (Rejane Paula)
+Relatório gerado em: 2025-11-11 20:53
 --------------------------------------------------
   Total de Partidas: 3
   Vitórias: 3
   Derrotas: 0
   Taxa de Vitória: 100.0%
-  Média de Tentativas: 6.0
-  Melhor Pontuação: 60
-  Pontuação Total: 150
+  Média de Tentativas: 5.7
+  Melhor Pontuação: 70
+  Pontuação Total: 160
 --------------------------------------------------

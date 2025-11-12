@@ -4,6 +4,9 @@ import random
 from datetime import datetime
 import os
 import ast #lê os dicionarios no formato .txt
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # ============================================
 # Sistema de Jogo de Adivinhação
@@ -192,6 +195,32 @@ def jogar_partida(usuario):
 
 
 # ============================================
+# FUNÇÃO DE CONVERSÃO PARA DATAFRAME
+# ============================================
+
+
+def get_partidas_df():
+    """
+    Converte a lista global 'partidas' em um DataFrame do Pandas
+    para análise.
+    """
+    if not partidas:
+        #retorna o dataframe vazio com colunas definidas para evitar erros
+        return pd.DataFrame(columns=[
+            'id', 'jogador', 'numero_secreto', 'tentativas', 
+            'total_tentativas', 'pontuacao', 'resultado', 'data'
+        ])
+    
+    df = pd.DataFrame(partidas)
+    
+    #limpando os tipos de dados
+    df['data'] = pd.to_datetime(df['data'])
+    df['pontuacao'] = df['pontuacao'].astype(int)
+    df['total_tentativas'] = df['total_tentativas'].astype(int)
+    return df
+
+
+# ============================================
 # FUNÇÕES DE ESTATÍSTICAS
 # ============================================
 
@@ -213,97 +242,41 @@ def calcular_estatisticas_jogador(usuario):
     # TODO: Encontrar melhor pontuação ---- FEITO
     # TODO: Calcular pontuação total ---- FEITO
     # TODO: Criar dicionário de estatísticas ---- FEITO
-    partidas_do_jogador = []
-    for partida in partidas:
-        if partida['jogador'] == usuario:
-            partidas_do_jogador.append(partida)
+    df_partidas = get_partidas_df()
     
-    total_de_partidas = len(partidas_do_jogador)
+    #filtra partidas do jogador
+    df_jogador = df_partidas[df_partidas['jogador'] == usuario]
+    
+    total_de_partidas = len(df_jogador)
 
-    if total_de_partidas == 0: #checar se é zero para evitar problemas de divisão
-        estatisticas_vazias = {
-            'total_partidas': 0,
-            'total_vitorias': 0,
-            'total_derrotas': 0,
-            'taxa_vitoria': 0.0,
-            'media_tentativas': 0.0,
-            'melhor_pontuacao': 0,
-            'pontuacao_total': 0
+    if total_de_partidas == 0:
+        return {
+            'total_partidas': 0, 'total_vitorias': 0, 'total_derrotas': 0,
+            'taxa_vitoria': 0.0, 'media_tentativas': 0.0,
+            'melhor_pontuacao': 0, 'pontuacao_total': 0, 'media_pontuacao': 0.0
         }
-        return estatisticas_vazias
 
-    total_vitorias = 0
-    for resul in partidas_do_jogador:
-        if resul['resultado'] == "VITÓRIA":
-            total_vitorias += 1
-
+    total_vitorias = len(df_jogador[df_jogador['resultado'] == 'VITÓRIA'])
     total_derrotas = total_de_partidas - total_vitorias
-
-    taxa_vitoria = calcular_taxa_vitoria(usuario)
-
-    media_tentativas_jogador = media_tentativas(usuario)
-
-    melhor_pontuacao = 0
-    for partida in partidas_do_jogador:
-        if partida['pontuacao'] > melhor_pontuacao:
-            melhor_pontuacao = partida['pontuacao']
-
-    pontuacao_total = 0
-    for partida in partidas_do_jogador:
-        pontuacao_total += partida['pontuacao']
+    taxa_vitoria = (total_vitorias / total_de_partidas) * 100
+    
+    media_tentativas_jogador = df_jogador['total_tentativas'].mean()
+    melhor_pontuacao = df_jogador['pontuacao'].max()
+    pontuacao_total = df_jogador['pontuacao'].sum()
+    media_pontuacao = df_jogador['pontuacao'].mean()
 
     estatisticas = {
-        'total_partidas': total_de_partidas,
-        'total_vitorias': total_vitorias,
-        'total_derrotas': total_derrotas,
-        'taxa_vitoria': taxa_vitoria,
-        'media_tentativas': media_tentativas_jogador,
-        'melhor_pontuacao': melhor_pontuacao,
-        'pontuacao_total': pontuacao_total
+        'total_partidas': int(total_de_partidas),
+        'total_vitorias': int(total_vitorias),
+        'total_derrotas': int(total_derrotas),
+        'taxa_vitoria': float(taxa_vitoria),
+        'media_tentativas': float(media_tentativas_jogador),
+        'melhor_pontuacao': int(melhor_pontuacao),
+        'pontuacao_total': int(pontuacao_total),
+        'media_pontuacao': float(media_pontuacao)
     }
 
     return estatisticas
-
-
-def calcular_taxa_vitoria(usuario):
-    """
-    Calcula taxa de vitórias de um jogador.
-    
-    Args:
-        usuario (str): Usuário do jogador
-    
-    Returns:
-        float: Taxa de vitória (0-100)
-    """
-    # TODO: Filtrar partidas do jogador ----- FEITO
-    # TODO: Contar vitórias e total ----- FEITO
-    # TODO: Calcular percentual ----- FEITO
-
-    #taxa de vitoria = (vitorias / tentativas) * 100
-
-    #partidas_do_jogador = [partida for partida in partidas if partida['jogador'] == usuario]  ------ exemplo de listcomprehension, mas eu não entendo muito bem como funciona
-
-    partidas_do_jogador = []
-    for partida in partidas:
-        if partida['jogador'] == usuario:
-            partidas_do_jogador.append(partida)
-    
-    total_de_partidas = len(partidas_do_jogador)
-
-    if total_de_partidas == 0: #checar se é zero para evitar problemas de divisão
-        return 0.0
-
-    total_vitorias = 0
-    for resul in partidas_do_jogador:
-        if resul['resultado'] == "VITÓRIA":
-            total_vitorias += 1
-
-    taxa_vitoria = (total_vitorias / total_de_partidas) * 100
-
-    return taxa_vitoria
-
-
-def media_tentativas(usuario):
     """
     Calcula média de tentativas por partida de um jogador.
     
@@ -336,6 +309,9 @@ def media_tentativas(usuario):
     return media
 
 
+#removi as funções de taxa de vitoria e media de tentativa, pois agora estão todas na calcular_estatisticas_jogador
+
+
 # ============================================
 # FUNÇÕES DE RANKINGS
 # ============================================
@@ -355,21 +331,14 @@ def ranking_pontuacao_media(limite=10):
     # TODO: Calcular pontuação média ----- FEITO
     # TODO: Ordenar por pontuação (decrescente) ----- FEITO
     # TODO: Retornar top N ----- FEITO
-    jogadores_estatisticas = {}
-    for usuario in jogadores.keys():
-        estatisticas = calcular_estatisticas_jogador(usuario)
-        jogadores_estatisticas[usuario] = estatisticas
-
-    pontuacao_media_jogadores = []
-    for usuario, estatisticas in jogadores_estatisticas.items():
-        if estatisticas['total_partidas'] > 0:
-            pontuacao_media = estatisticas['pontuacao_total'] / estatisticas['total_partidas']
-        else:
-            pontuacao_media = 0.0
-        pontuacao_media_jogadores.append((usuario, pontuacao_media))
-
-    pontuacao_media_jogadores.sort(key=lambda x: x[1], reverse=True)
-    return pontuacao_media_jogadores[:limite]
+    df = get_partidas_df()
+    if df.empty:
+        return []
+    
+    media_pontuacao = df.groupby('jogador')['pontuacao'].mean().sort_values(ascending=False)
+    
+    lista_pontuacao = list(media_pontuacao.to_dict().items())
+    return lista_pontuacao[:limite]
 
 
 def ranking_vitorias(limite=10):
@@ -385,17 +354,18 @@ def ranking_vitorias(limite=10):
     # TODO: Calcular vitorias por jogador ----- FEITO
     # TODO: Ordenar por vitórias (decrescente) ----- FEITO
     # TODO: Retornar top N ----- FEITO
-    jogadores_estatisticas = {}
-    for usuario in jogadores.keys():    
-        estatisticas = calcular_estatisticas_jogador(usuario)
-        jogadores_estatisticas[usuario] = estatisticas
-
-    vitorias_jogadores = []
-    for usuario, estatisticas in jogadores_estatisticas.items():
-        vitorias_jogadores.append((usuario, estatisticas['total_vitorias']))
-
-    vitorias_jogadores.sort(key=lambda x: x[1], reverse=True)
-    return vitorias_jogadores[:limite]
+    df = get_partidas_df()
+    if df.empty:
+        return []
+        
+    df_vitorias = df[df['resultado'] == 'VITÓRIA']
+    if df_vitorias.empty: #verifica se tem vitórias
+        return []
+        
+    contador_vitorias = df_vitorias.groupby('jogador')['id'].count().sort_values(ascending=False)
+    
+    lista_vitorias = list(contador_vitorias.to_dict().items())
+    return lista_vitorias[:limite]
 
 
 def ranking_melhor_pontuacao(limite=10):
@@ -411,18 +381,14 @@ def ranking_melhor_pontuacao(limite=10):
     # TODO: Encontrar melhor pontuação de cada jogador ----- FEITO
     # TODO: Ordenar por pontuação (decrescente) ----- FEITO
     # TODO: Retornar top N ----- FEITO
-
-    jogadores_estatisticas = {}
-    for usuario in jogadores.keys():
-        estatisticas = calcular_estatisticas_jogador(usuario)
-        jogadores_estatisticas[usuario] = estatisticas
-
-    melhor_pontuacao_jogadores = []
-    for usuario, estatisticas in jogadores_estatisticas.items():
-        melhor_pontuacao_jogadores.append((usuario, estatisticas['melhor_pontuacao']))
-
-    melhor_pontuacao_jogadores.sort(key=lambda x: x[1], reverse=True)
-    return melhor_pontuacao_jogadores[:limite]
+    df = get_partidas_df()
+    if df.empty:
+        return []
+        
+    lista_pontuacao = df.groupby('jogador')['pontuacao'].max().sort_values(ascending=False)
+    
+    rank_pontuacao = list(lista_pontuacao.to_dict().items())
+    return rank_pontuacao[:limite]
 
 
 
@@ -554,6 +520,149 @@ def exibir_dica(numero_escolhido, numero_secreto):
 
 
 # ============================================
+# FUNÇÕES DE VISUALIZAÇÃO
+# ============================================
+
+sns.set_theme(style="whitegrid", palette="pastel") #deixar os gráficos mais bonitos
+
+def grafico_historico_individual(usuario, estatisticas):
+    """
+    Gera e exibe um gráfico de linha com o histórico de
+    pontuação do jogador e sua média.
+    """
+    df = get_partidas_df()
+    df_jogador = df[df['jogador'] == usuario].sort_values(by='data')
+
+    if df_jogador.empty:
+        print("Você ainda não tem partidas registradas.")
+        return
+    
+    media = estatisticas['media_pontuacao']
+
+    plt.figure(figsize=(12, 6))
+    
+    #gráfico de linha
+    ax = sns.lineplot(data=df_jogador, x='data', y='pontuacao', marker='o', label='Pontuação da Partida', color='C0')
+    ax.fill_between(df_jogador['data'], df_jogador['pontuacao'], color='C0', alpha=0.2)
+
+    #faixa da média
+    ax.axhline(y=media, color='#E74C3C', linestyle='--', label=f'Sua Média ({media:.1f} pts)')
+
+    ax.set_title(f'Sua Evolução - {usuario}', fontsize=16, weight='bold')
+    ax.set_xlabel('Data da Partida', fontsize=12)
+    ax.set_ylabel('Pontuação Obtida', fontsize=12)
+    ax.set_ylim(0, 110) #limite superior para melhor visualização
+    ax.legend()
+    
+    #remoção de bordas
+    sns.despine() 
+    plt.tight_layout()
+    
+    caminho_salvar = f'relatorios/grafico_historico_{usuario}.png'
+    plt.savefig(caminho_salvar)
+    print(f"Gráfico de histórico salvo em: {caminho_salvar}")
+    
+    print("\nExibindo gráfico 'Sua Evolução'...")
+    plt.show()
+
+
+def grafico_ranking_vitorias_global(limite=10):
+    """
+    Gera e exibe um gráfico de barras (Seaborn) com o
+    ranking de vitórias, incluindo rótulos de dados.
+    """
+    df = get_partidas_df()
+    if df.empty:
+        print("Sem dados de partidas.")
+        return
+
+    vitorias = df[df['resultado'] == 'VITÓRIA']
+    if vitorias.empty:
+        print("Nenhuma vitória registrada.")
+        return
+        
+    rank_vitorias = vitorias['jogador'].value_counts().head(limite)
+    ranking_df = rank_vitorias.reset_index()
+    ranking_df.columns = ['jogador', 'total_vitorias']
+
+    plt.figure(figsize=(12, 7))
+    
+    #gráfico de barras horizontais
+    ax = sns.barplot(x='total_vitorias', y='jogador', data=ranking_df, palette='viridis_r', hue='jogador', legend=False, dodge=False)   
+
+    ax.set_title(f'Ranking: Jogadores com Mais Vitórias (Top {limite})', fontsize=16, weight='bold')
+    ax.set_xlabel('Total de Vitórias', fontsize=12)
+    ax.set_ylabel('Jogador', fontsize=12)
+    
+    #escrevendo o número de vitórias ao lado de cada barra
+    for p in ax.patches:
+        ax.annotate(f'{int(p.get_width())} vitórias', xy=( (p.get_width() + 0.1) , (p.get_y() + p.get_height() / 2) ), ha='left', va='center', color='black', fontsize=10, weight='bold')
+    
+    ax.set_xlim(0, ranking_df['total_vitorias'].max() * 1.1) 
+    
+    sns.despine(left=True)
+    plt.tight_layout()
+    
+    caminho_salvar = 'relatorios/grafico_ranking_vitorias.png'
+    plt.savefig(caminho_salvar)
+    print(f"Gráfico de ranking salvo em: {caminho_salvar}")
+    
+    print("\nExibindo gráfico 'Ranking Global de Vitórias'...")
+    plt.show()
+
+
+def grafico_distribuicao_global():
+    """
+    Gera e exibe:
+    1. Histograma de Pontuações (com linha de média).
+    2. Gráfico de Barras de Tentativas (substituindo o Boxplot).
+    """
+    df = get_partidas_df()
+    if df.empty:
+        print("Sem dados de partidas.")
+        return
+
+    fig, axes = plt.subplots(1, 2, figsize=(16, 7))
+    fig.suptitle('Análise Geral do Jogo (Todas as Partidas)', fontsize=18, weight='bold')
+    
+    #gráfico das melhores pontuações
+    df_vitorias = df[df['resultado'] == 'VITÓRIA']
+    if not df_vitorias.empty:
+        media_pontos = df_vitorias['pontuacao'].mean()
+        
+        sns.histplot(data=df_vitorias, x='pontuacao', bins=10, kde=True, ax=axes[0], color='#0056b3', line_kws={'lw': 3, 'color': '#0056b3'})
+        
+        #linha da média
+        axes[0].axvline(media_pontos, color='#E74C3C', linestyle='--', lw=2, label=f'Média ({media_pontos:.1f} pts)')
+        
+        axes[0].set_title('Como as Pontuações se Distribuem? (em Vitórias)', fontsize=14)
+        axes[0].set_xlabel('Pontuação', fontsize=12)
+        axes[0].set_ylabel('Número de Partidas', fontsize=12)
+        axes[0].legend()
+    else:
+        axes[0].set_title('Nenhuma vitória registrada para analisar pontuações.')
+
+    #gráfico distribuição de tentativas
+    
+    todas_tentativas_possiveis = pd.Categorical(df['total_tentativas'], categories=range(1, MAX_TENTATIVAS + 1), ordered=True)
+
+    sns.histplot(data=df, x='total_tentativas', bins=10, kde=True, ax=axes[1], color='#00b306', line_kws={'lw': 3, 'color': "#00b306"})
+    
+    axes[1].set_title('Quantas Tentativas São Mais Comuns? (Geral)', fontsize=14)
+    axes[1].set_xlabel('Número de Tentativas Usadas na Partida', fontsize=12)
+    axes[1].set_ylabel('Número de Partidas', fontsize=12)
+    
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95]) #ajeita o título principal
+    
+    caminho_salvar = 'relatorios/grafico_distribuicao_global.png'
+    plt.savefig(caminho_salvar)
+    print(f"Gráfico de distribuição salvo em: {caminho_salvar}")
+    
+    print("\nExibindo gráfico 'Análise Geral do Jogo'...")
+    plt.show()
+
+
+# ============================================
 # SALVANDO E CARREGANDO DADOS E RELATÓRIOS
 # ============================================
 
@@ -644,7 +753,7 @@ def salvar_relatorio_individual(usuario):
         estatisticas = calcular_estatisticas_jogador(usuario)
         nome_jogador = jogadores[usuario]['nome']
     except Exception as e:
-        print(f"Erro ao calcular estatísticas para salvar: {e}")
+        print(f"Erro ao calcular estatísticas: {e}")
 
     linhas_relatorio = [
         f"--- Relatório de Desempenho Individual ---\n",
@@ -674,7 +783,6 @@ def salvar_relatorio_rankings(limite=10):
     Gera o relatório geral de todos os jogadores (rankings)
     e salva em um arquivo .txt na pasta /relatorios.
     """
-    # 1. Pegar os dados
     try:
         rank_vitorias = ranking_vitorias(limite)
         rank_melhor = ranking_melhor_pontuacao(limite)
@@ -708,33 +816,6 @@ def salvar_relatorio_rankings(limite=10):
 
 
 def salvar_historico_individual(usuario, historico_dados, limite):
-    """
-    Gera o histórico de partidas recentes de um jogador
-    e salva em um arquivo .txt na pasta /relatorios.
-    """
-    try:
-        linhas_relatorio = [
-            f"--- Histórico de Partidas Recentes ---\n",
-            f"Jogador: {usuario}\n",
-            f"Mostrando as últimas {len(historico_dados)} partidas (limite de {limite}).\n",
-            f"Relatório gerado em: {datetime.now().strftime('%Y-%m-%d %H:%M')}\n",
-            f"--------------------------------------------------\n"
-        ]
-        
-        if not historico_dados:
-            linhas_relatorio.append("Nenhuma partida encontrada.\n")
-        else:
-            for p in historico_dados:
-                data_formatada = p['data'].strftime('%Y-%m-%d %H:%M')
-                linha = f"  ID {p['id']} | {data_formatada} | {p['resultado']} | Tentativas: {p['total_tentativas']} | Pontos: {p['pontuacao']}\n"
-                linhas_relatorio.append(linha)
-
-        caminho_arquivo = f"relatorios/historico_{usuario}.txt"
-        with open(caminho_arquivo, "w", encoding='utf-8') as f:
-            f.writelines(linhas_relatorio)
-    
-    except Exception as e:
-        print(f"Erro ao salvar relatório de histórico: {e}")
     """
     Gera o histórico de partidas recentes de um jogador
     e salva em um arquivo .txt na pasta /relatorios.
@@ -781,14 +862,11 @@ def main():
     """
     Função principal do programa.
     """
-    # TODO: Menu interativo ----- FEITO
-    # TODO: Opções: cadastrar, login, jogar, estatísticas, ranking, sair ----- FEITO
-    
     usuario_logado = None
 
     while True:
         
-        # --- MENU 1: ESTADO "DESLOGADO" ---
+        # menu principal deslogado
         if usuario_logado is None:
             print("\n--- BEM-VINDO AO JOGO DE ADIVINHAÇÃO ---")
             print("1. Cadastrar novo jogador")
@@ -797,60 +875,59 @@ def main():
             opcao = input("Escolha uma opção: ")
 
             if opcao == '1':
-                # --- CADASTRAR ---
+                #cadastro
                 nome = input("Digite seu nome completo: ")
                 usuario = input("Digite seu nome de usuário (único): ")
-                #a função cadastrar_jogador já imprime se deu certo ou errado
                 cadastrar_jogador(nome, usuario)
             
             elif opcao == '2':
-                # --- LOGIN ---
+                #login
                 usuario = input("Digite seu nome de usuário: ")
-                dados_jogador = login_jogador(usuario) 
-                
+                dados_jogador = login_jogador(usuario)
                 if dados_jogador:
                     print(f"Login bem-sucedido! Bem-vindo, {dados_jogador['nome']}!")
                     usuario_logado = usuario
-                #a função login_jogador já imprime o erro se falhar
 
             elif opcao == '3':
-                # --- SAIR ---
+                #sair do jogo
+                print("Salvando dados...")
                 salvar_dados_txt(jogadores, partidas)
-
                 print("Obrigado por jogar! Até mais.")
                 break
             
             else:
                 print("Opção inválida. Tente novamente.")
         
-        # --- MENU 2: ESTADO "LOGADO" ---
+        #menu principal logado
         else:
             print(f"\n--- JOGO (Logado como: {usuario_logado}) ---")
             print("1. Jogar uma nova partida")
-            print("2. Ver minhas estatísticas")
+            print("2. Ver minhas estatísticas (com gráficos)")
             print("3. Ver meu histórico de partidas")
-            print("4. Ver rankings globais")
+            print("4. Ver rankings globais (com gráficos)")
             print("5. Fazer logout (Voltar ao menu principal)")
             opcao = input("Escolha uma opção: ")
 
             if opcao == '1':
-                # --- JOGAR ---
+                #jogar partida
                 partida_info = jogar_partida(usuario_logado)
                 print(f"Partida {partida_info['id']} registrada. Pontuação: {partida_info['pontuacao']}")
 
             elif opcao == '2':
-                # --- ESTATÍSTICAS ---
+                #estatísticas do jogador
+                print("Calculando estatísticas...")
                 exibir_estatisticas_jogador(usuario_logado)
-
-                #checa se o jogador tem partidas antes de tentar salvar o relatório
+                
                 estatisticas = calcular_estatisticas_jogador(usuario_logado)
                 if estatisticas['total_partidas'] > 0:
                     salvar_relatorio_individual(usuario_logado)
+                    grafico_historico_individual(usuario_logado, estatisticas)
                 else:
                     print("Nenhuma partida encontrada.")
 
             elif opcao == '3':
-                # --- HISTÓRICO ---
+                #histórico de partidas do jogador
+                print("Buscando histórico de partidas...")
                 limite_historico = 5
                 historico = historico_partidas(usuario_logado, limite_historico)
                 print(f"\n--- {limite_historico} Últimas Partidas de {usuario_logado} ---")
@@ -859,22 +936,27 @@ def main():
                     print("Nenhuma partida encontrada.")
                 else:
                     for p in historico:
-                        #formata a data pra ficar legal de ler
                         data_formatada = p['data'].strftime('%Y-%m-%d %H:%M')
                         print(f"  ID {p['id']} | {data_formatada} | {p['resultado']} | Tentativas: {p['total_tentativas']} | Pontos: {p['pontuacao']}")
-                salvar_historico_individual(usuario_logado, historico, limite_historico)
+                
+                if historico:
+                    salvar_historico_individual(usuario_logado, historico, limite_historico)
 
             elif opcao == '4':
-                # --- RANKING ---
+                #rankings globais
                 print("\n--- RANKINGS GLOBAIS ---")
                 exibir_ranking()
+                
                 if partidas:
                     salvar_relatorio_rankings()
+                    grafico_ranking_vitorias_global()
+                    grafico_distribuicao_global()
                 else:
                     print("Nenhuma partida encontrada.")
 
             elif opcao == '5':
-                # --- LOGOUT ---
+                #logout
+                print(f"Salvando dados de {usuario_logado}...")
                 salvar_dados_txt(jogadores, partidas)
                 print(f"Até logo, {usuario_logado}!")
                 usuario_logado = None

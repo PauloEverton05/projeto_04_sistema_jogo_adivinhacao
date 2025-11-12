@@ -1,12 +1,12 @@
 --- Relatório de Desempenho Individual ---
-Jogador: paulo (Paulo Everton)
-Relatório gerado em: 2025-11-11 21:59
+Jogador: teste (teste)
+Relatório gerado em: 2025-11-11 21:30
 --------------------------------------------------
-  Total de Partidas: 5
-  Vitórias: 5
+  Total de Partidas: 1
+  Vitórias: 1
   Derrotas: 0
   Taxa de Vitória: 100.0%
-  Média de Tentativas: 5.0
-  Melhor Pontuação: 100
-  Pontuação Total: 300
+  Média de Tentativas: 7.0
+  Melhor Pontuação: 40
+  Pontuação Total: 40
 --------------------------------------------------

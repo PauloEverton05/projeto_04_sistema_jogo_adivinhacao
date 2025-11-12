@@ -1,0 +1,8 @@
+--- Histórico de Partidas Recentes ---
+Jogador: Rejane
+Mostrando as últimas 3 partidas.
+Relatório gerado em: 2025-11-11 20:54
+--------------------------------------------------
+  ID 15 | 2025-11-11 20:53 | VITÓRIA | Tentativas: 7 | Pontos: 40
+  ID 14 | 2025-11-11 20:47 | VITÓRIA | Tentativas: 4 | Pontos: 70
+  ID 13 | 2025-11-11 20:46 | VITÓRIA | Tentativas: 6 | Pontos: 50

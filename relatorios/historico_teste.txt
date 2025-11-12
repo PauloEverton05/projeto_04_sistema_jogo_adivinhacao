@@ -1,0 +1,6 @@
+--- Histórico de Partidas Recentes ---
+Jogador: teste
+Mostrando as últimas 1 partidas.
+Relatório gerado em: 2025-11-11 21:30
+--------------------------------------------------
+  ID 17 | 2025-11-11 21:30 | VITÓRIA | Tentativas: 7 | Pontos: 40

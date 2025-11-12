@@ -1,26 +1,32 @@
 --- Relatório Geral de Jogadores (Rankings) ---
-Relatório gerado em: 2025-11-07 19:04
+Relatório gerado em: 2025-11-11 21:58
 
 --- Top 10 por Vitórias ---
-  1. bianca - Vitórias: 2
-  2. alana - Vitórias: 2
-  3. paulo - Vitórias: 1
-  4. Honorio - Vitórias: 1
-  5. gustavo - Vitórias: 1
+  1. paulo - Vitórias: 5
+  2. Rejane - Vitórias: 3
+  3. bianca - Vitórias: 2
+  4. alana - Vitórias: 2
+  5. Honorio - Vitórias: 1
   6. carlos - Vitórias: 1
+  7. gustavo - Vitórias: 1
+  8. teste - Vitórias: 1
 
 --- Top 10 por Melhor Pontuação ---
   1. paulo - Melhor Pontuação: 100
-  2. bianca - Melhor Pontuação: 60
+  2. Rejane - Melhor Pontuação: 70
   3. carlos - Melhor Pontuação: 60
-  4. alana - Melhor Pontuação: 40
-  5. gustavo - Melhor Pontuação: 30
-  6. Honorio - Melhor Pontuação: 10
+  4. bianca - Melhor Pontuação: 60
+  5. teste - Melhor Pontuação: 40
+  6. alana - Melhor Pontuação: 40
+  7. gustavo - Melhor Pontuação: 30
+  8. Honorio - Melhor Pontuação: 10
 
 --- Top 10 por Pontuação Média ---
-  1. paulo - Pontuação Média: 100.0
+  1. paulo - Pontuação Média: 60.0
   2. carlos - Pontuação Média: 60.0
-  3. bianca - Pontuação Média: 50.0
-  4. alana - Pontuação Média: 30.0
-  5. gustavo - Pontuação Média: 30.0
-  6. Honorio - Pontuação Média: 5.0
+  3. Rejane - Pontuação Média: 53.3
+  4. bianca - Pontuação Média: 50.0
+  5. teste - Pontuação Média: 40.0
+  6. alana - Pontuação Média: 30.0
+  7. gustavo - Pontuação Média: 30.0
+  8. Honorio - Pontuação Média: 5.0

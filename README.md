@@ -106,7 +106,7 @@ O sistema é dividido em **duas partes principais**: o **Jogo** e o **Módulo de
 **Estruturas Internas:**  
 ```python
 jogadores = {'user1': {'nome': 'Nome', 'data_cadastro': datetime_obj}}
-partidas = [{'id': 1, 'jogador': 'user1', 'pontuacao': 80, ...}]
+partidas = [{'id': 1, 'jogador': 'user1', 'numero_secreto': 80, ...}]
 ```
 
 **Persistência:**  
@@ -164,7 +164,7 @@ O menu interativo permite jogar, visualizar estatísticas e rankings, com gráfi
 
 A análise usa o `df_partidas`, contendo o histórico de todas as partidas.
 
-- **Desempenho Geral:** Média de [XX] pontos, [Y.Y] tentativas.  
+- **Desempenho Geral:** Média de [X] pontos, [Y] tentativas.  
 - **Ranking de Jogadores:** `groupby('jogador')` → melhores jogadores.  
 - **Distribuição de Tentativas:** Histograma e boxplot mostram que a maioria termina entre [A] e [B] tentativas.
 
@@ -203,7 +203,12 @@ PROJETO_04_SISTEMA_JOGO_ADIVINHACAO/
 
 **Exemplo de Gráfico (Ranking de Vitórias):**
 
+![Menu Logado](images-md/grafico_ranking_vitorias.png "Menu Logado")
+
 **Exemplo de Gráfico (Distribuição de Pontuações):**
+
+
+![Menu Logado](images-md/grafico_distribuicao_global.png "Menu Logado")
 
 ---
 
@@ -229,7 +234,10 @@ PROJETO_04_SISTEMA_JOGO_ADIVINHACAO/
 
 ## 👤 12. Contribuições
 
-Projeto desenvolvido integralmente por **Paulo Everton Souza Rodrigues**.
+- **Paulo Everton Souza Rodrigues**.
+  - Desenvolvimento integral do projeto, incluindo a lógica do jogo (Módulo 1), a implementação das análises com Pandas (Módulo 2) e a criação das visualizações com Matplotlib/Seaborn (Módulo 3).
+
+  - Foi utilizada inteligência artificial como ferramenta de auxílio para a estruturação inicial do esqueleto do projeto e para consulta de documentação de funções específicas, não para a geração do código lógico final.
 
 ---
 
